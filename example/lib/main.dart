@@ -37,7 +37,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _controller = InteractiveSliderController(10.0);
+  final _controller = InteractiveSliderController(0.0);
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_controller.value < 100.0) {
+          _controller.value += 1.0;
+        } else {
+          _timer?.cancel();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
             max: 100.0,
             onChanged: (value) {
               // This callback runs repeatedly for every update
-              print(value);
             },
             onProgressUpdated: (value) {
               // This callback runs once when the user finishes updating the slider

@@ -64,6 +64,8 @@ class InteractiveSlider extends StatefulWidget {
     this.startIconBuilder,
     this.centerIconBuilder,
     this.endIconBuilder,
+    this.onChangeStart,
+    this.onChangeEnd,
   })  : unfocusedOpacity = unfocusedOpacity ??
             (iconPosition == IconPosition.inside ? 1.0 : 0.4),
         assert(transitionCurvePeriod > 0.0),
@@ -172,6 +174,12 @@ class InteractiveSlider extends StatefulWidget {
 
   /// Widget builder to run when slider progress is updated
   final ValueWidgetBuilder<double>? endIconBuilder;
+
+  /// A callback that runs when the user starts updating the slider's progress
+  final ValueChanged<double>? onChangeStart;
+
+  /// A callback that runs when the user finishes updating the slider's progress
+  final ValueChanged<double>? onChangeEnd;
 
   @override
   State<InteractiveSlider> createState() => _InteractiveSliderState();
@@ -355,6 +363,7 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
         _height.value = widget.focusedHeight;
         _opacity.value = 1.0;
         _margin.value = widget.focusedMargin;
+        widget.onChangeStart?.call(_progress.value);
       },
       onHorizontalDragEnd: (details) {
         if (!mounted) return;
@@ -362,6 +371,7 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
         _opacity.value = widget.unfocusedOpacity;
         _margin.value = widget.unfocusedMargin;
         widget.onProgressUpdated?.call(_progress.value);
+        widget.onChangeEnd?.call(_progress.value);
       },
       onHorizontalDragUpdate: (details) {
         if (!mounted) return;
