@@ -1,7 +1,5 @@
 library interactive_slider;
 
-// import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -20,6 +18,13 @@ enum GradientSize {
   progressWidth,
   totalWidth,
 }
+
+// class InteractiveSliderController extends ValueNotifier<double> {
+//   InteractiveSliderController(super._value);
+
+//   @override
+//   set value(double value) => super.value = value;
+// }
 
 class InteractiveSlider extends StatefulWidget {
   static const defaultTransitionPeriod = 0.8;
@@ -227,14 +232,6 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
     super.initState();
     _progress.addListener(_onChanged);
     _updateCurveInfo();
-
-    if (widget.controller != null) {
-      widget.controller!.stream.listen((newValue) {
-        setState(() {
-          _progress.value = newValue;
-        });
-      });
-    }
   }
 
   @override
