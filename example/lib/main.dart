@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:interactive_slider/interactive_slider.dart';
@@ -35,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _controller = InteractiveSliderController(0.5);
+  final _controller = InteractiveSliderController(10.0);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Text(progress.toStringAsFixed(3)),
                 ),
                 ElevatedButton(
-                  onPressed: () => _controller.value = 1.0,
+                  onPressed: () => _controller.value = 100.0,
                   child: const Text('Max'),
                 ),
               ],
@@ -72,8 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: _controller,
             startIcon: const Icon(CupertinoIcons.minus_circle),
             endIcon: const Icon(CupertinoIcons.add_circled),
+            min: 0.0,
+            max: 100.0,
             onChanged: (value) {
               // This callback runs repeatedly for every update
+              print(value);
             },
             onProgressUpdated: (value) {
               // This callback runs once when the user finishes updating the slider

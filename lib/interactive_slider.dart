@@ -1,11 +1,11 @@
 library interactive_slider;
 
+import 'package:flutter/foundation.dart';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:interactive_slider/interactive_slider_controller.dart';
 import 'package:interactive_slider/interactive_slider_painter.dart';
 
+import 'package:interactive_slider/interactive_slider_controller.dart';
 export 'package:interactive_slider/interactive_slider_controller.dart';
 
 enum IconPosition {
@@ -18,6 +18,13 @@ enum GradientSize {
   progressWidth,
   totalWidth,
 }
+
+// class InteractiveSliderController extends ValueNotifier<double> {
+//   InteractiveSliderController(super._value);
+
+//   @override
+//   set value(double value) => super.value = value;
+// }
 
 class InteractiveSlider extends StatefulWidget {
   static const defaultTransitionPeriod = 0.8;
@@ -276,6 +283,8 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
             color: widget.foregroundColor ?? brightnessColor,
             gradient: widget.gradient,
             gradientSize: widget.gradientSize,
+            min: widget.min,
+            max: widget.max,
           ),
           child: switch (widget.iconPosition) {
             IconPosition.inside => Padding(
@@ -373,8 +382,10 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
           }
           sliderWidth -= widget.iconGap * 2;
         }
-        _progress.value = (_progress.value + (details.delta.dx / sliderWidth))
-            .clamp(0.0, 1.0);
+        final deltaValue =
+            (details.delta.dx / sliderWidth) * (widget.max - widget.min);
+        _progress.value =
+            (_progress.value + deltaValue).clamp(widget.min, widget.max);
       },
       child: IconTheme(
         data: theme.iconTheme.copyWith(
@@ -439,8 +450,7 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
     );
   }
 
-  void _onChanged() => widget.onChanged?.call(
-      lerpDouble(widget.min, widget.max, _progress.value) ?? _progress.value);
+  void _onChanged() => widget.onChanged?.call(_progress.value);
 
   void _updateCurveInfo() {
     _transitionCurve = ElasticOutCurve(widget.transitionCurvePeriod);
