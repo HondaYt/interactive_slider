@@ -22,6 +22,7 @@ class InteractiveSliderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final normalizedProgress = (progress.value - min) / (max - min);
+    if (normalizedProgress.isNaN) return;
     final progressRect =
         Rect.fromLTWH(0, 0, normalizedProgress * size.width, size.height);
     if (gradient case var gradient?) {
