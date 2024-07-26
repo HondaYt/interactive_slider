@@ -244,7 +244,9 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
   void dispose() {
     _height.dispose();
     _opacity.dispose();
-    _progress.dispose();
+    if (widget.controller == null) {
+      _progress.dispose();
+    }
     super.dispose();
   }
 
